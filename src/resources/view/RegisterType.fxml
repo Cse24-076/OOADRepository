@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.RegisterTypeController"
+            prefWidth="400" prefHeight="300"
+            stylesheets="@main.css">
+
+    <VBox alignment="CENTER" spacing="20" layoutX="50" layoutY="60" prefWidth="300" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="60">
+        <Label text="Select Customer Type" styleClass="title-label" />
+
+        <Button fx:id="individualButton" text="Individual Customer" onAction="#handleIndividual" styleClass="menu-button" prefWidth="220"/>
+        <Button fx:id="companyButton" text="Company Customer" onAction="#handleCompany" styleClass="menu-button" prefWidth="220"/>
+        <Button text="Back" onAction="#handleBack" styleClass="menu-button" prefWidth="220"/>
+    </VBox>
+</AnchorPane>

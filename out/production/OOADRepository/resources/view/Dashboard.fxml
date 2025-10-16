@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.DashboardController"
+            prefWidth="500" prefHeight="400"
+            stylesheets="@main.css">
+
+    <VBox alignment="CENTER" spacing="15" layoutX="50" layoutY="40" prefWidth="400" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="40">
+        <Label fx:id="welcomeLabel" text="Welcome, [Customer]" styleClass="title-label" />
+
+        <Button text="Open New Account" onAction="#handleOpenAccount" styleClass="menu-button" prefWidth="250"/>
+        <Button text="View Accounts" onAction="#handleViewAccounts" styleClass="menu-button" prefWidth="250"/>
+        <Button text="Deposit" onAction="#handleDeposit" styleClass="menu-button" prefWidth="250"/>
+        <Button text="Withdraw" onAction="#handleWithdraw" styleClass="menu-button" prefWidth="250"/>
+        <Button text="Apply Interest" onAction="#handleApplyInterest" styleClass="menu-button" prefWidth="250"/>
+        <Button text="Logout" onAction="#handleLogout" styleClass="menu-button" prefWidth="250"/>
+    </VBox>
+</AnchorPane>
