@@ -164,14 +164,4 @@ public class Main {
         sc.nextLine(); // clear buffer
         return value;
     }
-
-    private static double getDoubleInput() {
-        while (!sc.hasNextDouble()) {
-            System.out.println("❌ Please enter a valid amount.");
-            sc.nextLine();
-        }
-        double value = sc.nextDouble();
-        sc.nextLine(); // clear buffer
-        return value;
-    }
 }
