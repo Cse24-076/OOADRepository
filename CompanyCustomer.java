@@ -21,9 +21,4 @@ public class CompanyCustomer extends Customer {
     public String getContactPerson() {
         return contactPerson;
     }
-
-    @Override
-    public String toString() {
-        return "Company Customer: " + companyName + " (" + customerID + ")";
-    }
 }

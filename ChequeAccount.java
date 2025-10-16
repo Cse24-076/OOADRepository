@@ -1,8 +1,8 @@
-public class ChequeAccount extends Account {
+public class ChequeAccount extends Account implements Withdraw {
     private String employerName;
     private String employerAddress;
 
-    public ChequeAccount(String accountNumber, double balance, String branch, 
+    public ChequeAccount(String accountNumber, double balance, String branch,
                          String employerName, String employerAddress) {
         super(accountNumber, balance, branch);
         this.employerName = employerName;
@@ -13,18 +13,14 @@ public class ChequeAccount extends Account {
     public void withdraw(double amount) {
         if (amount > 0 && amount <= balance) {
             balance -= amount;
-            System.out.println("✅ Withdrawn BWP" + amount + " from " + accountNumber);
-            System.out.println("   New balance: BWP" + balance);
-        } else if (amount > balance) {
-            System.out.println("❌ Insufficient funds. Available: BWP" + balance);
         } else {
-            System.out.println("❌ Invalid withdrawal amount.");
+            System.out.println("❌ Invalid or insufficient withdrawal.");
         }
     }
 
     @Override
     public void payInterest() {
-        System.out.println("ℹ️ Cheque Account " + accountNumber + " does not earn interest.");
+        System.out.println("Cheque Account does not earn interest.");
     }
 
     @Override
@@ -38,11 +34,5 @@ public class ChequeAccount extends Account {
 
     public String getEmployerAddress() {
         return employerAddress;
-    }
-
-    @Override
-    public String toString() {
-        return "Cheque Account | " + super.toString() + 
-               " | Employer: " + employerName + " | No interest";
     }
 }

@@ -5,13 +5,6 @@ public class Bank {
     private Scanner sc = new Scanner(System.in);
     private int accountCounter = 1000;
 
-    public Bank() {
-        customers.add(new IndividualCustomer("C001", "12345", "Gaborone", "John", "Mogomotsi"));
-        customers.add(new IndividualCustomer("C002", "abcde", "Francistown", "Mary", "Dube"));
-        // Optional: Add company customers if needed
-        // customers.add(new CompanyCustomer("C003", "pass123", "Maun", "TechBots", "Kabelo"));
-    }
-
     public Customer login(String id, String password) {
         for (Customer c : customers) {
             if (c.customerID.equals(id) && c.loginWithPassword(password)) {
@@ -21,17 +14,16 @@ public class Bank {
         return null;
     }
 
-    public void openAccount(Customer cust) {
+    public void addCustomer(Customer customer) {
+        customers.add(customer);
+    }
+
+    public void openAccount(Customer cust, int choice) {
         System.out.println("\n=== OPEN NEW ACCOUNT ===");
-        System.out.println("1. Savings Account (0.05% interest, NO withdrawals)");
-        System.out.println("2. Investment Account (5% interest, min BWP500 deposit)");
-        System.out.println("3. Cheque Account (NO interest, requires employment info)");
-        System.out.print("Choose account type: ");
 
-        int choice = getIntInput();
-
-        System.out.print("Enter branch name: ");
+        System.out.print("Enter branch name (or 0 to cancel): ");
         String branch = sc.nextLine();
+        if (branch.equals("0")) return;
 
         String accNum = generateAccountNumber();
 
@@ -42,8 +34,9 @@ public class Bank {
                 System.out.println("✅ SAVINGS ACCOUNT " + accNum + " CREATED!");
             }
             case 2 -> {
-                System.out.print("Enter initial deposit (minimum BWP" + InvestmentAccount.MIN_OPENING_BALANCE + "): ");
+                System.out.print("Enter initial deposit (minimum BWP" + InvestmentAccount.MIN_OPENING_BALANCE + ", or 0 to cancel): ");
                 double deposit = getDoubleInput();
+                if (deposit == 0) return;
 
                 if (deposit >= InvestmentAccount.MIN_OPENING_BALANCE) {
                     InvestmentAccount investment = new InvestmentAccount(accNum, deposit, branch);
@@ -55,10 +48,13 @@ public class Bank {
             }
             case 3 -> {
                 if (cust instanceof IndividualCustomer) {
-                    System.out.print("Enter employer name: ");
+                    System.out.print("Enter employer name (or 0 to cancel): ");
                     String employer = sc.nextLine();
-                    System.out.print("Enter employer address: ");
+                    if (employer.equals("0")) return;
+
+                    System.out.print("Enter employer address (or 0 to cancel): ");
                     String empAddress = sc.nextLine();
+                    if (empAddress.equals("0")) return;
 
                     ChequeAccount cheque = new ChequeAccount(accNum, 0, branch, employer, empAddress);
                     cust.addAccount(cheque);
@@ -73,7 +69,6 @@ public class Bank {
 
     public void deposit(Customer cust) {
         List<Account> accounts = cust.getAccounts();
-
         if (accounts.isEmpty()) {
             System.out.println("❌ No accounts available for deposit.");
             return;
@@ -82,30 +77,31 @@ public class Bank {
         System.out.println("\n=== MAKE DEPOSIT ===");
         displayCustomerAccounts(cust);
 
-        System.out.print("Enter account number: ");
+        System.out.print("Enter account number (or 0 to cancel): ");
         String accNum = sc.nextLine();
+        if (accNum.equals("0")) return;
 
-        for (Account acc : accounts) {
-            if (acc.getAccountNumber().equals(accNum)) {
-                System.out.print("Enter deposit amount: BWP");
-                double amount = getDoubleInput();
-
-                if (amount <= 0) {
-                    System.out.println("❌ Amount must be greater than zero.");
-                    return;
-                }
-
-                acc.deposit(amount);
-                System.out.println("✅ Deposit complete. New balance: BWP" + acc.getBalance());
-                return;
-            }
+        Account target = findAccountByNumber(accounts, accNum);
+        if (target == null) {
+            System.out.println("❌ Account not found: " + accNum);
+            return;
         }
-        System.out.println("❌ Account not found: " + accNum);
+
+        System.out.print("Enter deposit amount (or 0 to cancel): BWP");
+        double amount = getDoubleInput();
+        if (amount == 0) return;
+
+        if (amount <= 0) {
+            System.out.println("❌ Amount must be greater than zero.");
+            return;
+        }
+
+        target.deposit(amount);
+        System.out.println("✅ Deposit complete. New balance: BWP" + target.getBalance());
     }
 
     public void withdraw(Customer cust) {
         List<Account> accounts = cust.getAccounts();
-
         if (accounts.isEmpty()) {
             System.out.println("❌ No accounts available for withdrawal.");
             return;
@@ -114,30 +110,35 @@ public class Bank {
         System.out.println("\n=== MAKE WITHDRAWAL ===");
         displayCustomerAccounts(cust);
 
-        System.out.print("Enter account number: ");
+        System.out.print("Enter account number (or 0 to cancel): ");
         String accNum = sc.nextLine();
+        if (accNum.equals("0")) return;
 
-        for (Account acc : accounts) {
-            if (acc.getAccountNumber().equals(accNum)) {
-                System.out.print("Enter withdrawal amount: BWP");
-                double amount = getDoubleInput();
-
-                if (amount <= 0) {
-                    System.out.println("❌ Amount must be greater than zero.");
-                    return;
-                }
-
-                acc.withdraw(amount);
-                System.out.println("✅ Withdrawal complete. New balance: BWP" + acc.getBalance());
-                return;
-            }
+        Account target = findAccountByNumber(accounts, accNum);
+        if (target == null) {
+            System.out.println("❌ Account not found: " + accNum);
+            return;
         }
-        System.out.println("❌ Account not found: " + accNum);
+
+        System.out.print("Enter withdrawal amount (or 0 to cancel): BWP");
+        double amount = getDoubleInput();
+        if (amount == 0) return;
+
+        if (amount <= 0) {
+            System.out.println("❌ Amount must be greater than zero.");
+            return;
+        }
+
+        if (target instanceof Withdraw) {
+            ((Withdraw) target).withdraw(amount);
+            System.out.println("✅ Withdrawal complete. New balance: BWP" + target.getBalance());
+        } else {
+            System.out.println("❌ You cannot withdraw from this account.");
+        }
     }
 
     public void payInterest(Customer cust) {
         List<Account> accounts = cust.getAccounts();
-
         if (accounts.isEmpty()) {
             System.out.println("❌ No accounts available for interest payment.");
             return;
@@ -152,7 +153,6 @@ public class Bank {
 
     public void displayCustomerAccounts(Customer cust) {
         List<Account> accounts = cust.getAccounts();
-
         if (accounts.isEmpty()) {
             System.out.println("❌ No accounts found.");
             return;
@@ -166,18 +166,17 @@ public class Bank {
         }
     }
 
-    private String generateAccountNumber() {
-        return "ACC" + (accountCounter++);
+    private Account findAccountByNumber(List<Account> accounts, String accNum) {
+        for (Account acc : accounts) {
+            if (acc.getAccountNumber().equalsIgnoreCase(accNum.trim())) {
+                return acc;
+            }
+        }
+        return null;
     }
 
-    private int getIntInput() {
-        while (!sc.hasNextInt()) {
-            System.out.println("❌ Please enter a valid number.");
-            sc.nextLine();
-        }
-        int value = sc.nextInt();
-        sc.nextLine(); // clear buffer
-        return value;
+    private String generateAccountNumber() {
+        return "ACC" + (accountCounter++);
     }
 
     private double getDoubleInput() {

@@ -23,22 +23,10 @@ public abstract class Customer {
 
     public void addAccount(Account account) {
         accounts.add(account);
-        System.out.println("✅ Account " + account.getAccountNumber() + " added to customer " + customerID);
     }
 
     public List<Account> getAccounts() {
         return accounts;
-    }
-
-    public void displayAccounts() {
-        if (accounts.isEmpty()) {
-            System.out.println("No accounts found for this customer.");
-            return;
-        }
-        System.out.println("\n=== ACCOUNTS FOR " + getDetails() + " ===");
-        for (int i = 0; i < accounts.size(); i++) {
-            System.out.println((i + 1) + ". " + accounts.get(i));
-        }
     }
 
     public abstract String getDetails();
