@@ -2,23 +2,57 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.OpenAccountController"
-            prefWidth="450" prefHeight="400"
-            stylesheets="@main.css">
+            prefWidth="500" prefHeight="500"
+            style="-fx-background-color: linear-gradient(to bottom, #E0E5EC, #F5F6FA);">
 
-    <VBox alignment="CENTER" spacing="12" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="40">
-        <Label text="Open New Account" styleClass="title-label" />
+    <!-- Center Card -->
+    <VBox spacing="15" alignment="TOP_CENTER"
+          AnchorPane.leftAnchor="40"
+          AnchorPane.rightAnchor="40"
+          AnchorPane.topAnchor="40"
+          style="-fx-background-color: white;
+                 -fx-background-radius: 15;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 20, 0, 0, 4);
+                 -fx-padding: 25;">
 
-        <TextField fx:id="branchField" promptText="Branch Name" />
-        <ComboBox fx:id="accountTypeBox" promptText="Select Account Type" prefWidth="250"/>
-        <TextField fx:id="depositField" promptText="Initial Deposit (for Investment)" />
-        <TextField fx:id="employerField" promptText="Employer Name (for Cheque)" />
-        <TextField fx:id="employerAddressField" promptText="Employer Address (for Cheque)" />
+        <!-- Header -->
+        <Label text="Open New Account"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0A3D62;"/>
 
-        <Button text="Create Account" onAction="#handleCreateAccount" styleClass="menu-button" prefWidth="200"/>
-        <Button text="Back" onAction="#handleBack" styleClass="menu-button" prefWidth="200"/>
+        <!-- Branch -->
+        <TextField fx:id="branchField" promptText="Branch Name"
+                   style="-fx-background-color: #F9F9F9; -fx-background-radius: 5; -fx-padding: 5 10 5 10;"/>
+
+        <!-- Account Type -->
+        <ComboBox fx:id="accountTypeBox" promptText="Select Account Type" prefWidth="300"
+                  style="-fx-background-radius: 5; -fx-padding: 5 10 5 10;"/>
+
+        <!-- Investment Specific -->
+        <TextField fx:id="depositField" promptText="Initial Deposit (for Investment)"
+                   style="-fx-background-color: #F9F9F9; -fx-background-radius: 5; -fx-padding: 5 10 5 10;"/>
+
+        <!-- Cheque Specific -->
+        <TextField fx:id="employerField" promptText="Employer Name (for Cheque)"
+                   style="-fx-background-color: #F9F9F9; -fx-background-radius: 5; -fx-padding: 5 10 5 10;"/>
+        <TextField fx:id="employerAddressField" promptText="Employer Address (for Cheque)"
+                   style="-fx-background-color: #F9F9F9; -fx-background-radius: 5; -fx-padding: 5 10 5 10;"/>
+
+        <!-- Optional Notes -->
+        <Label fx:id="noteLabel" text="" style="-fx-text-fill: #E74C3C; -fx-font-size: 12px;"/>
+
+        <!-- Buttons -->
+        <Button text="Create Account" fx:id="createAccountButton"
+                onAction="#handleCreateAccount" prefWidth="220"
+                style="-fx-background-color: #0A3D62; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;"/>
+
+        <Button text="Back" fx:id="backButton"
+                onAction="#handleBack" prefWidth="220"
+                style="-fx-background-color: #3C6382; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;"/>
+
     </VBox>
 </AnchorPane>

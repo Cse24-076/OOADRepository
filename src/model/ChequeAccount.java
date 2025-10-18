@@ -1,6 +1,6 @@
 package model;
 
-public class ChequeAccount extends Account implements Withdraw {
+public class ChequeAccount extends Account {
     private String employer;
     private String employerAddress;
 
@@ -11,13 +11,6 @@ public class ChequeAccount extends Account implements Withdraw {
     }
 
     @Override
-    public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-        }
-    }
-
-    @Override
     public void payInterest() {
         // Cheque accounts typically don't earn interest
     }
@@ -25,5 +18,19 @@ public class ChequeAccount extends Account implements Withdraw {
     @Override
     public String getAccountType() {
         return "Cheque";
+    }
+
+    public String getEmployer() {
+        return employer;
+    }
+
+    public String getEmployerAddress() {
+        return employerAddress;
+    }
+
+    @Override
+    public String toFileString() {
+        return String.format("CHEQUE|%s|%.2f|%s|%s|%s",
+                accountNumber, balance, branch, employer, employerAddress);
     }
 }

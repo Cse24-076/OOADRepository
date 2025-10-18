@@ -1,64 +1,63 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import model.*;
 
 public class ApplyInterestController {
 
-    @FXML private AnchorPane rootPane;
+    @FXML private Label notificationLabel;  // Using notificationLabel from FXML
+    @FXML private Button applyButton;
+    @FXML private Button backButton;
 
-    private static final Bank bank = BankContext.bank;
+    private final Bank bank = Main.getBank();
     private Customer customer;
 
     @FXML
-    private void initialize() {
-        customer = LoginController.getLoggedInCustomer();
+    public void initialize() {
+        customer = Main.getLoggedInCustomer();
+        updateNotificationLabel();
     }
 
     @FXML
     private void handleApplyInterest() {
-        if (customer == null) {
-            showAlert("No customer logged in.");
-            return;
-        }
-
-        System.out.println("Accounts before interest: " + customer.getAccounts().size());
-
         boolean success = bank.payInterest(customer);
+
         if (success) {
-            showAlert("✅ Interest applied to all eligible accounts.");
+            notificationLabel.setText("✓ Monthly interest applied successfully to all eligible accounts!");
+            notificationLabel.setStyle("-fx-text-fill: #27ae60;");
         } else {
-            showAlert("❌ No accounts eligible for interest.");
+            notificationLabel.setText("No eligible accounts found for interest payment.");
+            notificationLabel.setStyle("-fx-text-fill: #e74c3c;");
         }
     }
 
     @FXML
     private void handleBack() {
-        switchScene("/view/Dashboard.fxml");
+        loadScene("/view/Dashboard.fxml");
     }
 
-    private void switchScene(String fxmlPath) {
+    private void updateNotificationLabel() {
+        if (customer == null || customer.getAccounts().isEmpty()) {
+            notificationLabel.setText("You don't have any accounts yet. Open an account first.");
+            notificationLabel.setStyle("-fx-text-fill: #e74c3c;");
+        } else {
+            notificationLabel.setText("Click 'Apply Interest' to add monthly interest to your savings and investment accounts.");
+            notificationLabel.setStyle("-fx-text-fill: #3C6382;");
+        }
+    }
+
+    private void loadScene(String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
-            Stage stage = (Stage) rootPane.getScene().getWindow(); // ✅ Safe reference
+            Stage stage = (Stage) notificationLabel.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             stage.setScene(new Scene(root));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void showAlert(String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

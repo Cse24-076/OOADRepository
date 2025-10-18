@@ -1,22 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+    <?import javafx.scene.control.*?>
+    <?import javafx.scene.layout.*?>
+    <?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.DashboardController"
-            prefWidth="500" prefHeight="400"
-            stylesheets="@main.css">
+    <AnchorPane prefHeight="550" prefWidth="745.0" style="-fx-background-color: linear-gradient(to bottom, #E0E5EC, #F5F6FA);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DashboardController">
 
-    <VBox alignment="CENTER" spacing="15" layoutX="50" layoutY="40" prefWidth="400" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="40">
-        <Label fx:id="welcomeLabel" text="Welcome, [Customer]" styleClass="title-label" />
+        <!-- Header -->
+        <VBox spacing="5" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+            <Label fx:id="welcomeLabel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #0A3D62;" text="Welcome to your dashboard" />
+            <Label fx:id="customerTypeLabel" style="-fx-font-size: 14px; -fx-text-fill: #3C6382;" text="" />
+        </VBox>
 
-        <Button text="Open New Account" onAction="#handleOpenAccount" styleClass="menu-button" prefWidth="250"/>
-        <Button text="View Accounts" onAction="#handleViewAccounts" styleClass="menu-button" prefWidth="250"/>
-        <Button text="Deposit" onAction="#handleDeposit" styleClass="menu-button" prefWidth="250"/>
-        <Button text="Withdraw" onAction="#handleWithdraw" styleClass="menu-button" prefWidth="250"/>
-        <Button text="Apply Interest" onAction="#handleApplyInterest" styleClass="menu-button" prefWidth="250"/>
-        <Button text="Logout" onAction="#handleLogout" styleClass="menu-button" prefWidth="250"/>
-    </VBox>
-</AnchorPane>
+        <!-- Info Section -->
+        <HBox layoutX="12.0" layoutY="80.0" prefHeight="217.0" prefWidth="560.0" spacing="20" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="80.0">
+            <!-- Recent Transactions -->
+            <VBox prefWidth="280" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10,0,0,2);">
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0A3D62;" text="Recent Transactions" />
+                <ListView fx:id="transactionsListView" prefHeight="150" style="-fx-background-radius: 5;" />
+            </VBox>
+
+            <!-- Quick Tips -->
+            <VBox prefHeight="218.0" prefWidth="395.0" spacing="10" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10,0,0,2);">
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0A3D62;" text="Quick Tips" />
+                <Label fx:id="tip1" prefHeight="20.0" prefWidth="317.0" style="-fx-font-size: 14px; -fx-text-fill: #3C6382;" text="Check your account regularly for unusual activity." />
+                <Label fx:id="tip2" style="-fx-font-size: 14px; -fx-text-fill: #3C6382;" text="Set up automatic bill payments to avoid late fees." />
+                <Label fx:id="tip3" style="-fx-font-size: 14px; -fx-text-fill: #3C6382;" text="Track your savings and deposits via the dashboard." />
+            </VBox>
+        </HBox>
+
+        <!-- Quick Action Buttons -->
+        <GridPane hgap="20" layoutY="303.0" prefHeight="73.0" prefWidth="560.0" vgap="15" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="303.0">
+            <Button onAction="#handleOpenAccount" prefHeight="50" style="-fx-background-color: #0A3D62; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" text="Open New Account" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+            <Button onAction="#handleViewAccounts" prefHeight="50" style="-fx-background-color: #3C6382; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" text="View Accounts" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+            <Button onAction="#handleDeposit" prefHeight="50" style="-fx-background-color: #0A3D62; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" text="Deposit" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Button onAction="#handleWithdraw" prefHeight="50" style="-fx-background-color: #3C6382; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" text="Withdraw" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button onAction="#handleApplyInterest" prefHeight="50" style="-fx-background-color: #0A3D62; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" text="Apply Interest" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button onAction="#handleLogout" prefHeight="50" style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" text="Logout" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints />
+                <ColumnConstraints />
+                <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+            </rowConstraints>
+        </GridPane>
+
+        <!-- Footer -->
+        <Label style="-fx-text-fill: #95A5A6; -fx-font-size: 12px;" text="Bank_Pascal © 2025" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="20" />
+    </AnchorPane>

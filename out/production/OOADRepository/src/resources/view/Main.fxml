@@ -2,17 +2,54 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.MainController"
-            prefWidth="400" prefHeight="300"
-            stylesheets="@main.css">
+            prefWidth="600" prefHeight="400"
+            style="-fx-background-color: linear-gradient(to bottom, #0A3D62, #3C6382);">
 
-    <VBox alignment="CENTER" spacing="20" layoutX="50" layoutY="60" prefWidth="300" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="60">
-        <Label text="🏦 Welcome to the Banking System" styleClass="title-label" />
+    <!-- Center Card -->
+    <VBox alignment="CENTER" spacing="20"
+          AnchorPane.leftAnchor="100"
+          AnchorPane.rightAnchor="100"
+          AnchorPane.topAnchor="80"
+          AnchorPane.bottomAnchor="80"
+          style="-fx-background-color: white;
+                 -fx-background-radius: 15;
+                 -fx-border-radius: 15;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 20, 0, 0, 4);">
 
-        <Button fx:id="registerButton" text="Register" onAction="#handleRegister" styleClass="menu-button" prefWidth="200"/>
-        <Button fx:id="loginButton" text="Login" onAction="#handleLogin" styleClass="menu-button" prefWidth="200"/>
+        <Label text="Bank Pascal"
+               style="-fx-font-size: 26px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: #0A3D62;"/>
+
+        <Label text="Secure • Modern • Reliable"
+               style="-fx-font-size: 14px;
+                      -fx-text-fill: #3C6382;"/>
+
+        <Separator prefWidth="300"/>
+
+        <Button fx:id="registerButton"
+                text="Create New Account"
+                onAction="#handleRegister"
+                prefWidth="250"
+                style="-fx-background-color: #0A3D62;
+                       -fx-text-fill: white;
+                       -fx-font-size: 15px;
+                       -fx-background-radius: 8;"/>
+
+        <Button fx:id="loginButton"
+                text="Login to Existing Account"
+                onAction="#handleLogin"
+                prefWidth="250"
+                style="-fx-background-color: #3C6382;
+                       -fx-text-fill: white;
+                       -fx-font-size: 15px;
+                       -fx-background-radius: 8;"/>
+
     </VBox>
+
 </AnchorPane>

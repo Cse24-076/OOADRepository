@@ -7,12 +7,18 @@ public class SavingsAccount extends Account {
 
     @Override
     public void payInterest() {
-        double interest = balance * 0.03;
+        double interest = balance * 0.03; // 3% monthly
         deposit(interest);
     }
 
     @Override
     public String getAccountType() {
         return "Savings";
+    }
+
+    @Override
+    public String toFileString() {
+        return String.format("SAVINGS|%s|%.2f|%s",
+                accountNumber, balance, branch);
     }
 }

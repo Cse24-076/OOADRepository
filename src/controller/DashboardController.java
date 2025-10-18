@@ -1,64 +1,107 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import model.Customer;
+import javafx.scene.Scene;
+import model.*;
+
+import java.util.List;
 
 public class DashboardController {
 
     @FXML private Label welcomeLabel;
+    @FXML private Label customerTypeLabel;  // Added this field
+    @FXML private ListView<String> transactionsListView;  // Only this list exists in FXML
 
     private Customer customer;
+    private final Bank bank = Main.getBank();
 
     @FXML
-    private void initialize() {
-        customer = LoginController.getLoggedInCustomer();
+    public void initialize() {
+        customer = Main.getLoggedInCustomer();
         if (customer != null) {
-            welcomeLabel.setText("Welcome, " + customer.getCustomerID());
+            welcomeLabel.setText("Welcome, " + customer.getName() + "!");
+
+            // Set customer type label
+            if (customer instanceof model.IndividualCustomer) {
+                customerTypeLabel.setText("Individual Customer");
+            } else if (customer instanceof model.CompanyCustomer) {
+                customerTypeLabel.setText("Company Customer");
+            }
+
+            loadTransactions();
         }
     }
 
+    // Display all transactions across all accounts
+    private void loadTransactions() {
+        List<String> allTransactions = bank.getCustomerTransactions(customer);
+        transactionsListView.getItems().setAll(allTransactions);
+    }
+
+    // Navigate to Open Account screen
     @FXML
     private void handleOpenAccount() {
-        switchScene("/view/OpenAccount.fxml");
+        loadScene("/view/OpenAccount.fxml");
     }
 
-    @FXML
-    private void handleViewAccounts() {
-        switchScene("/view/ViewAccounts.fxml");
-    }
-
+    // Navigate to Deposit screen
     @FXML
     private void handleDeposit() {
-        switchScene("/view/Deposit.fxml");
+        loadScene("/view/Deposit.fxml");
     }
 
+    // Navigate to Withdraw screen
     @FXML
     private void handleWithdraw() {
-        switchScene("/view/Withdraw.fxml");
+        loadScene("/view/Withdraw.fxml");
     }
 
+    // Apply interest to all accounts
     @FXML
     private void handleApplyInterest() {
-        switchScene("/view/ApplyInterest.fxml");
+        boolean success = bank.payInterest(customer);
+        if (success) {
+            showAlert("Success", "Interest applied to all eligible accounts!");
+            loadTransactions(); // Refresh transactions
+        } else {
+            showAlert("Error", "No accounts available for interest payment.");
+        }
     }
 
+    // Navigate to View Accounts screen
+    @FXML
+    private void handleViewAccounts() {
+        loadScene("/view/ViewAccounts.fxml");
+    }
+
+    // Logout and return to login
     @FXML
     private void handleLogout() {
-        switchScene("/view/Main.fxml");
+        Main.setLoggedInCustomer(null); // Clear logged-in customer
+        loadScene("/view/Login.fxml");
     }
 
-    private void switchScene(String fxmlPath) {
+    // Utility method to load a new FXML scene
+    private void loadScene(String fxmlPath) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             stage.setScene(new Scene(root));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Helper method to show alerts
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

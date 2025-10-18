@@ -1,11 +1,11 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import model.*;
 
 import java.util.List;
@@ -14,30 +14,26 @@ public class ViewAccountsController {
 
     @FXML private ListView<String> accountListView;
 
-    private static final Bank bank = BankContext.bank;
+    private final Bank bank = Main.getBank();
     private Customer customer;
 
     @FXML
-    private void initialize() {
-        customer = LoginController.getLoggedInCustomer();
-        if (customer != null) {
-            List<String> summaries = bank.getAccountSummaries(customer);
-            accountListView.getItems().addAll(summaries);
-        }
+    public void initialize() {
+        customer = Main.getLoggedInCustomer();
+        List<String> accounts = bank.getAccountSummaries(customer);
+        accountListView.getItems().setAll(accounts);
     }
 
     @FXML
     private void handleBack() {
-        switchScene("/view/Dashboard.fxml");
+        loadScene("/view/Dashboard.fxml");
     }
 
-    private void switchScene(String fxmlPath) {
+    private void loadScene(String fxmlPath) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             Stage stage = (Stage) accountListView.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 }

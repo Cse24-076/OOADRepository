@@ -1,39 +1,42 @@
 package controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
 
 public class RegisterTypeController {
 
-    @FXML private Button individualButton;
-    @FXML private Button companyButton;
-
     @FXML
-    private void handleIndividual() {
-        switchScene("/view/RegisterIndividual.fxml");
+    private void handleIndividual(ActionEvent event) {
+        loadPage(event, "/view/RegisterIndividual.fxml");
     }
 
     @FXML
-    private void handleCompany() {
-        switchScene("/view/RegisterCompany.fxml");
+    private void handleCompany(ActionEvent event) {
+        loadPage(event, "/view/RegisterCompany.fxml");
     }
 
     @FXML
-    private void handleBack() {
-        switchScene("/view/Main.fxml");
+    private void handleBack(ActionEvent event) {
+        loadPage(event, "/view/Login.fxml");
     }
 
-    private void switchScene(String fxmlPath) {
+    private void loadPage(ActionEvent event, String file) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-            Stage stage = (Stage) individualButton.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource(file));
+
+            // Correct way to get the current window
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
             stage.setScene(new Scene(root));
+            stage.show();
+
         } catch (Exception e) {
-            e.printStackTrace(); // Optional: replace with alert
+            e.printStackTrace();
         }
     }
 }

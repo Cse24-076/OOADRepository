@@ -1,69 +1,85 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import model.*;
 
 public class RegisterCompanyController {
 
-    @FXML private TextField idField;
-    @FXML private PasswordField passwordField;
-    @FXML private TextField addressField;
+    // Company Details
+    @FXML private TextField companyIdField;
     @FXML private TextField companyNameField;
-    @FXML private TextField contactPersonField;
+    @FXML private PasswordField passwordField;
 
-    private static final Bank bank = BankContext.bank;// Replace with shared instance if needed
+    // Contact Person
+    @FXML private TextField contactPersonNameField;
+    @FXML private TextField contactPersonEmailField;
+
+    // Buttons and Status
+    @FXML private Button registerButton;
+    @FXML private Button backButton;
+    @FXML private Label statusLabel;
+
+    private final Bank bank = Main.getBank();
 
     @FXML
     private void handleRegister() {
-        String id = idField.getText().trim();
+        String companyId = companyIdField.getText().trim();
+        String companyName = companyNameField.getText().trim();
         String password = passwordField.getText().trim();
-        String address = addressField.getText().trim();
-        String company = companyNameField.getText().trim();
-        String contact = contactPersonField.getText().trim();
+        String contactName = contactPersonNameField.getText().trim();
+        String contactEmail = contactPersonEmailField.getText().trim();
 
-        if (id.isEmpty() || password.isEmpty() || address.isEmpty() || company.isEmpty() || contact.isEmpty()) {
-            showAlert("All fields are required.");
+        // Validate required fields
+        if (companyId.isEmpty() || companyName.isEmpty() || password.isEmpty() ||
+                contactName.isEmpty() || contactEmail.isEmpty()) {
+            statusLabel.setText("Please fill in all required fields.");
             return;
         }
 
-        CompanyCustomer customer = new CompanyCustomer(id, password, address, company, contact);
-        boolean success = bank.registerCustomer(customer);
+        try {
+            // Create company customer with basic constructor
+            Customer customer = new CompanyCustomer(companyId, password, contactName, companyName);
 
-        if (success) {
-            showAlert("✅ Company registered successfully!");
-            switchScene("/view/Login.fxml");
-        } else {
-            showAlert("❌ Customer ID already exists.");
+            boolean success = bank.registerCustomer(customer);
+            if (success) {
+                statusLabel.setText("Company registered successfully!");
+                statusLabel.setStyle("-fx-text-fill: green;");
+                clearFields();
+            } else {
+                statusLabel.setText("Registration failed. Company ID may already exist.");
+                statusLabel.setStyle("-fx-text-fill: red;");
+            }
+        } catch (Exception e) {
+            statusLabel.setText("Error during registration: " + e.getMessage());
+            statusLabel.setStyle("-fx-text-fill: red;");
         }
     }
 
     @FXML
     private void handleBack() {
-        switchScene("/view/RegisterType.fxml");
+        loadScene("/view/Login.fxml");
     }
 
-    private void switchScene(String fxmlPath) {
+    private void clearFields() {
+        companyIdField.clear();
+        companyNameField.clear();
+        passwordField.clear();
+        contactPersonNameField.clear();
+        contactPersonEmailField.clear();
+    }
+
+    private void loadScene(String fxmlPath) {
         try {
+            Stage stage = (Stage) companyIdField.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-            Stage stage = (Stage) idField.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void showAlert(String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

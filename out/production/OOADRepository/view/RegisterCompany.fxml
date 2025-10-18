@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.RegisterCompanyController"
-            prefWidth="450" prefHeight="400"
-            stylesheets="@main.css">
+<AnchorPane prefHeight="600" prefWidth="500" style="-fx-background-color: linear-gradient(to bottom, #F5F6FA, #E0E5EC);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterCompanyController">
 
-    <VBox alignment="CENTER" spacing="12" layoutX="50" layoutY="40" prefWidth="350" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="40">
-        <Label text="Register Company Customer" styleClass="title-label" />
+    <!-- Center Card -->
+    <VBox alignment="TOP_CENTER" spacing="15" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 20, 0, 0, 4); -fx-padding: 25;" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="20.0">
 
-        <TextField fx:id="idField" promptText="Customer ID" />
-        <PasswordField fx:id="passwordField" promptText="Password" />
-        <TextField fx:id="addressField" promptText="Address" />
-        <TextField fx:id="companyNameField" promptText="Company Name" />
-        <TextField fx:id="contactPersonField" promptText="Contact Person" />
+        <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0A3D62;" text="Register Company Customer" />
 
-        <Button text="Register" onAction="#handleRegister" styleClass="menu-button" prefWidth="200"/>
-        <Button text="Back" onAction="#handleBack" styleClass="menu-button" prefWidth="200"/>
+        <!-- COMPANY DETAILS -->
+        <TitledPane expanded="true" style="-fx-text-fill: #0A3D62;" text="Company Details">
+            <content>
+                <VBox spacing="10">
+                    <TextField fx:id="companyIdField" promptText="Company Registration Number" style="-fx-background-color: #F9F9F9; -fx-background-radius: 5;" />
+                    <TextField fx:id="companyNameField" promptText="Company Name" style="-fx-background-color: #F9F9F9; -fx-background-radius: 5;" />
+                    <PasswordField fx:id="passwordField" promptText="Password" style="-fx-background-color: #F9F9F9; -fx-background-radius: 5;" />
+                </VBox>
+            </content>
+        </TitledPane>
+
+        <!-- AUTHORIZED CONTACT PERSON -->
+        <TitledPane expanded="true" style="-fx-text-fill: #0A3D62;" text="Authorized Contact Person">
+            <content>
+                <VBox spacing="10">
+                    <TextField fx:id="contactPersonNameField" promptText="Full Name" style="-fx-background-color: #F9F9F9; -fx-background-radius: 5;" />
+                    <TextField fx:id="contactPersonEmailField" promptText="Email Address" style="-fx-background-color: #F9F9F9; -fx-background-radius: 5;" />
+                </VBox>
+            </content>
+        </TitledPane>
+
+        <!-- BUTTONS -->
+        <Button fx:id="registerButton" onAction="#handleRegister" prefWidth="220" style="-fx-background-color: #0A3D62; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" text="Register" />
+
+        <Button fx:id="backButton" onAction="#handleBack" prefWidth="220" style="-fx-background-color: #3C6382; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 8;" text="Back" />
+
+        <!-- STATUS LABEL -->
+        <Label fx:id="statusLabel" alignment="CENTER" maxWidth="220" style="-fx-text-fill: red; -fx-font-size: 12px;" text="" wrapText="true" />
     </VBox>
+
 </AnchorPane>

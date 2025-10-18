@@ -1,74 +1,85 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import model.*;
 
 public class WithdrawController {
 
     @FXML private TextField accountNumberField;
     @FXML private TextField amountField;
+    @FXML private Label noteLabel;  // Using noteLabel from FXML for status messages
+    @FXML private Button withdrawButton;
+    @FXML private Button backButton;
 
-    private static final Bank bank = BankContext.bank;// Replace with shared instance if needed
+    private final Bank bank = Main.getBank();
     private Customer customer;
 
     @FXML
-    private void initialize() {
-        customer = LoginController.getLoggedInCustomer();
+    public void initialize() {
+        customer = Main.getLoggedInCustomer();
     }
 
     @FXML
     private void handleWithdraw() {
-        String accNum = accountNumberField.getText().trim();
+        String accountNumber = accountNumberField.getText().trim();
         String amountText = amountField.getText().trim();
 
-        if (accNum.isEmpty() || amountText.isEmpty()) {
-            showAlert("Please enter account number and amount.");
+        // Validate inputs
+        if (accountNumber.isEmpty() || amountText.isEmpty()) {
+            noteLabel.setText("Please enter both account number and amount.");
+            noteLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
         double amount;
         try {
             amount = Double.parseDouble(amountText);
+            if (amount <= 0) {
+                noteLabel.setText("Amount must be greater than zero.");
+                noteLabel.setStyle("-fx-text-fill: red;");
+                return;
+            }
         } catch (NumberFormatException e) {
-            showAlert("Invalid amount.");
+            noteLabel.setText("Please enter a valid amount.");
+            noteLabel.setStyle("-fx-text-fill: red;");
             return;
         }
 
-        boolean success = bank.withdraw(customer, accNum, amount);
+        // Perform withdrawal
+        boolean success = bank.withdraw(customer, accountNumber, amount);
+
         if (success) {
-            showAlert("✅ Withdrawal successful!");
-            switchScene("/view/Dashboard.fxml");
+            noteLabel.setText("Withdrawal of BWP " + String.format("%.2f", amount) + " successful!");
+            noteLabel.setStyle("-fx-text-fill: green;");
+            clearFields();
         } else {
-            showAlert("❌ Withdrawal failed. Check account type, balance, or number.");
+            noteLabel.setText("Withdrawal failed. Check account number and balance.");
+            noteLabel.setStyle("-fx-text-fill: red;");
         }
     }
 
     @FXML
     private void handleBack() {
-        switchScene("/view/Dashboard.fxml");
+        loadScene("/view/Dashboard.fxml");
     }
 
-    private void switchScene(String fxmlPath) {
+    private void clearFields() {
+        accountNumberField.clear();
+        amountField.clear();
+    }
+
+    private void loadScene(String fxmlPath) {
         try {
+            Stage stage = (Stage) amountField.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
-            Stage stage = (Stage) accountNumberField.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void showAlert(String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
